@@ -41,5 +41,18 @@ public class MasterController {
         return ResponseEntity.ok().body(responseOutput);
     }
 
+    @GetMapping("/employees")
+    public ResponseEntity<?> gettAllEmployee ( @RequestHeader ("email")  String email) throws  Exception{
+        ResponseOutput responseOutput = masterService.getListEmployee(email);
+        return ResponseEntity.ok().body(responseOutput);
+    }
+
+    @DeleteMapping("/employee/{employeeId}")
+    public ResponseEntity<?> deleteEmployee (@RequestHeader ("email")  String email,@PathVariable UUID employeeId) throws  Exception{
+        ResponseOutput responseOutput = masterService.deleteEmployee(email,employeeId);
+        return ResponseEntity.ok().body(responseOutput);
+    }
+
+
 
 }

@@ -30,8 +30,6 @@ public class Employee {
     @Column(name = "FULLNAME")
     private String fullname;
 
-
-
     @Column(name = "DOB")
     private Timestamp dob;
 

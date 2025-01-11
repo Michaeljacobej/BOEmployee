@@ -12,7 +12,7 @@ public interface MasterService {
     ResponseOutput loginUser(LoginRequest loginRequest) throws Exception;
     ResponseOutput addEmployee(UserEmployeeRequest userEmployeeRequest) throws Exception;
     ResponseOutput updateEmployee(UserEmployeeRequest userEmployeeRequest, UUID id) throws Exception;
-    ResponseOutput deleteEmployee() throws Exception;
-    ResponseOutput getListEmployee() throws Exception;
+    ResponseOutput deleteEmployee(String userEmployeeRequest, UUID id) throws Exception;
+    ResponseOutput getListEmployee( String email) throws Exception;
 
 }

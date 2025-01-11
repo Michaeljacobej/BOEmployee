@@ -2,7 +2,9 @@ package com.system.BOEmployee.service;
 
 import com.system.BOEmployee.constant.ErrorConstant;
 import com.system.BOEmployee.models.dto.request.*;
+import com.system.BOEmployee.models.dto.response.EmployeeResponse;
 import com.system.BOEmployee.models.dto.response.ErrorSchema;
+import com.system.BOEmployee.models.dto.response.ListEmployeeResponse;
 import com.system.BOEmployee.models.dto.response.ResponseOutput;
 import com.system.BOEmployee.models.entity.Employee;
 import com.system.BOEmployee.models.entity.Employee_System_Config;
@@ -15,6 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -80,9 +84,46 @@ public class MasterServiceImpl implements MasterService {
 
 
     @Override
-    public ResponseOutput getListEmployee() throws Exception {
+    public ResponseOutput getListEmployee(String email) throws Exception {
+        Optional<User> userOpt = userRepository.findByEmail(email);
 
-        return null;
+        if (userOpt.isPresent()) {
+            User user = userOpt.get();
+
+            List<Employee_System_Config> employeeSystemConfigs = employeeSystemConfigRepository.findAllByUser(userOpt.get());
+            ListEmployeeResponse listEmployeeResponse = new ListEmployeeResponse();
+            listEmployeeResponse.setEmail(email);
+            if(!employeeSystemConfigs.isEmpty()){
+                List<EmployeeResponse>employeeResponses = new ArrayList<>();
+                for(Employee_System_Config employeeSystemConfig:employeeSystemConfigs){
+                    EmployeeResponse employeeResponse = new EmployeeResponse();
+                    employeeResponse.setId(employeeSystemConfig.getEmployee().getId());
+                    employeeResponse.setFullname(employeeSystemConfig.getEmployee().getFullname());
+                    employeeResponse.setDateOfBirth(employeeSystemConfig.getEmployee().getDob());
+                    employeeResponse.setDepartment(employeeSystemConfig.getEmployee().getDepartment());
+                    employeeResponse.setSalary(employeeSystemConfig.getEmployee().getSalary());
+                    employeeResponses.add(employeeResponse);
+                }
+                listEmployeeResponse.setListEmployee(employeeResponses);
+
+                return new ResponseOutput(
+                        responseOutput.errorSchema(ErrorConstant.REQUEST_SUCCESS), listEmployeeResponse
+                );
+
+            }
+
+            return new ResponseOutput(
+                    responseOutput.errorSchema(ErrorConstant.REQUEST_SUCCESS), ""
+            );
+
+
+        }
+        else {
+
+            return new ResponseOutput(
+                    responseOutput.errorSchema(ErrorConstant.USER_NEED_TO_BE_REGISTERED), null
+            );
+        }
     }
 
     @Override
@@ -93,7 +134,7 @@ public class MasterServiceImpl implements MasterService {
         if (userOpt.isPresent()) {
             User user = userOpt.get();
 
-            Optional<Employee>optionalEmployee = employeeRepository.findByFullname(userEmployeeRequest.getEmployee().getSurname());
+            Optional<Employee>optionalEmployee = employeeRepository.findByFullname(userEmployeeRequest.getEmployee().getFullname());
 
             if(optionalEmployee.isPresent()){
                 Optional<Employee_System_Config>optionalEmployeeSystemConfig = employeeSystemConfigRepository.findByUserAndEmployee(user,optionalEmployee.get());
@@ -197,8 +238,44 @@ public class MasterServiceImpl implements MasterService {
     }
 
     @Override
-    public ResponseOutput deleteEmployee() throws Exception {
+    public ResponseOutput deleteEmployee(String email, UUID id) throws Exception {
+        Optional<User> userOpt = userRepository.findByEmail(email);
 
-        return null;
+        if (userOpt.isPresent()) {
+            User user = userOpt.get();
+
+            Optional<Employee>optionalEmployee = employeeRepository.findById(id);
+
+            if(optionalEmployee.isPresent()){
+                Optional<Employee_System_Config>optionalEmployeeSystemConfig = employeeSystemConfigRepository.findByUserAndEmployee(user,optionalEmployee.get());
+                if(optionalEmployeeSystemConfig.isPresent()){
+                    Employee_System_Config employeeSystemConfig = optionalEmployeeSystemConfig.get();
+                    employeeSystemConfigRepository.delete(employeeSystemConfig);
+
+                    return new ResponseOutput(
+                            responseOutput.errorSchema(ErrorConstant.REQUEST_SUCCESS), "Berhasil Hapus"
+                    );
+                }
+                else{
+                    return new ResponseOutput(
+                            responseOutput.errorSchema(ErrorConstant.EMPLOYEE_NEED_TO_BE_REGISTERED), ""
+                    );
+                }
+
+            }
+
+            else{
+                return new ResponseOutput(
+                        responseOutput.errorSchema(ErrorConstant.EMPLOYEE_NEED_TO_BE_REGISTERED), ""
+                );
+            }
+
+        }
+        else {
+
+            return new ResponseOutput(
+                    responseOutput.errorSchema(ErrorConstant.USER_NEED_TO_BE_REGISTERED), null
+            );
+        }
     }
 }
