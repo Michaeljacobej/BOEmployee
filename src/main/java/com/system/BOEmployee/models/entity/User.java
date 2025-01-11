@@ -15,7 +15,7 @@ import java.util.UUID;
 
 @Entity
 @Data
-@Table(name = "user", schema="public" )
+@Table(name = "USER", schema="public" )
 @NoArgsConstructor
 @AllArgsConstructor
 public class User {

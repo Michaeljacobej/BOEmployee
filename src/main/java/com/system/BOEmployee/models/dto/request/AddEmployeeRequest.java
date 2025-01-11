@@ -10,8 +10,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
-public class LoginRequest {
-    private String emailAddress;
+public class AddEmployeeRequest {
+    private String userId;
+    private EmployeeRequest employee;
 
-    private String password;
 }

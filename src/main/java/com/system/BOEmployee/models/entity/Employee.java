@@ -15,7 +15,7 @@ import java.util.UUID;
 
 @Entity
 @Data
-@Table(name = "employee", schema="public")
+@Table(name = "EMPLOYEE", schema="public")
 @NoArgsConstructor
 @AllArgsConstructor
 public class Employee {
@@ -28,6 +28,9 @@ public class Employee {
 
     @Column(name = "FULLNAME")
     private String fullname;
+
+    @Column(name = "SURNAME")
+    private String surname;
 
     @Column(name = "DOB")
     private Timestamp dob;

@@ -1,4 +1,4 @@
-package com.system.BOEmployee;
+package com.system.BOEmployee.exception;
 
 import com.system.BOEmployee.exception.custom.BadRequestException;
 import com.system.BOEmployee.exception.custom.InternalServerException;

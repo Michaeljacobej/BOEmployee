@@ -3,19 +3,14 @@ spring:
     name: employee-management-backend
   profiles:
     active: dev1
-
-  BOE:
+  main:
+    allow-circular-references: true
+  datasource:
     url: jdbc:postgresql://localhost:5432/postgres?createDatabaseIfNotExist=true
     jdbc-url: jdbc:postgresql://localhost:5432/postgres?createDatabaseIfNotExist=true
     username: postgres
     password: postgres
     driver-class-name: org.postgresql.Driver
-    hikari:
-      connectionTimeout: 30000
-      maximumPoolSize: 100
-    initialization-mode: always
-    initialize: true
-    continue-on-error: true
 
     jpa:
       generate-ddl : true

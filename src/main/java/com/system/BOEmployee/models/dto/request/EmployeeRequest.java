@@ -6,12 +6,20 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.sql.Timestamp;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
-public class LoginRequest {
-    private String emailAddress;
+public class EmployeeRequest {
+    private String fullname;
 
-    private String password;
+    private String surname;
+
+    private Timestamp timestamp;
+
+    private String department;
+
+    private Long salary;
 }

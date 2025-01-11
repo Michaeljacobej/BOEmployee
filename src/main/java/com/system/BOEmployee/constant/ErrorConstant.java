@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 public enum ErrorConstant {
     REQUEST_SUCCESS("BOE940-00-000", "Sukses", "Success", HttpStatus.OK),
 
+    USER_REGISTERED_FAILED("BOE940-00-001", "user sudah terdaftar", "user have already registered", HttpStatus.BAD_REQUEST),
+
     ;
 
     private String errorCode;
