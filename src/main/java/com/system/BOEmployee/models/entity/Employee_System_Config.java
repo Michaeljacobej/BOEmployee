@@ -14,6 +14,7 @@ import java.util.UUID;
 
 @Entity
 @Data
+
 @Table(name = "EMPLOYEE_SYSTEM_CONFIG", schema="public" )
 @NoArgsConstructor
 @AllArgsConstructor

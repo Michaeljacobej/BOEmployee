@@ -48,6 +48,9 @@ public class MasterServiceImpl implements MasterService {
                             responseOutput.errorSchema(ErrorConstant.REQUEST_SUCCESS), newUser
                     );
                 });
+//        return new ResponseOutput(
+//                responseOutput.errorSchema(ErrorConstant.REQUEST_SUCCESS), "Success"
+//        );
     }
 
     @Override
