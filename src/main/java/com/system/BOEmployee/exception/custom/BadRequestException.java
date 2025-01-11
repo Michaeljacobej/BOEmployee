@@ -1,6 +1,6 @@
 package com.system.BOEmployee.exception.custom;
 
-import com.bca.bomt940.models.dto.response.ErrorSchema;
+import com.system.BOEmployee.models.dto.response.ErrorSchema;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

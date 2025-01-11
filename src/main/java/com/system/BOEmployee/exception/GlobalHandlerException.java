@@ -1,10 +1,10 @@
 package com.system.BOEmployee;
 
-import com.bca.bomt940.exception.custom.BadRequestException;
-import com.bca.bomt940.exception.custom.InternalServerException;
-import com.bca.bomt940.models.dto.response.ErrorMessage;
-import com.bca.bomt940.models.dto.response.ErrorSchema;
-import com.bca.bomt940.models.dto.response.ResponseOutput;
+import com.system.BOEmployee.exception.custom.BadRequestException;
+import com.system.BOEmployee.exception.custom.InternalServerException;
+import com.system.BOEmployee.models.dto.response.ErrorMessage;
+import com.system.BOEmployee.models.dto.response.ErrorSchema;
+import com.system.BOEmployee.models.dto.response.ResponseOutput;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

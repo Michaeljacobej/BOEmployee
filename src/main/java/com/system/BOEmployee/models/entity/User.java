@@ -1,4 +1,4 @@
-package com.system.BOEmployee.models.dto.entity;
+package com.system.BOEmployee.models.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -12,12 +12,13 @@ import org.hibernate.annotations.UuidGenerator;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+
 @Entity
 @Data
-@Table(name = "Config_Master", schema="public")
+@Table(name = "user", schema="public" )
 @NoArgsConstructor
 @AllArgsConstructor
-public class Config_Master {
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @UuidGenerator
@@ -25,27 +26,18 @@ public class Config_Master {
     @JsonIgnore
     private UUID id;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "PARTNER_MASTER_ID")
-    private Partner_Master partnerMaster;
+    @Column(name = "FULLNAME")
+    private String fullname;
 
-    @Column(name = "FOLDER_CD")
-    private String folderCd;
+    @Column(name = "USERNAME")
+    private String username;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "TEMPLATE_MASTER_ID")
-    private Template_Master templateMaster;
+    @Column(name = "EMAIL")
+    private String email;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "BANK_ACCOUNTS_ID")
-    private Bank_Accounts bankAccounts;
+    @Column(name = "PASSWORD")
+    private String password;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "CHANNEL_MASTER_ID")
-    private Channel_Master channelMaster;
-
-    @Column(name = "IS_ACTIVE")
-    private String isActive;
 
     @Column(name = "CREATED_AT")
     @CreationTimestamp
@@ -56,4 +48,13 @@ public class Config_Master {
     @UpdateTimestamp
     @JsonIgnore
     private LocalDateTime updatedAt;
+
+//    @ManyToOne(fetch = FetchType.EAGER)
+//    @JoinColumn(name = "CHANNEL_MASTER_ID")
+//    private Channel_Master channelMaster;
+
+//    @ManyToOne(fetch = FetchType.EAGER)
+//    @JoinColumn(name = "CHANNEL_MASTER_ID")
+//    private Channel_Master channelMaster;
+
 }
