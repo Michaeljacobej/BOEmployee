@@ -32,7 +32,7 @@ public class Employee_System_Config {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "EMPLOYEE_ID")
-    private Employee EMPLOYEE_ID;
+    private Employee employee;
 
     @Column(name = "IS_ACTIVE")
     private String isActive;

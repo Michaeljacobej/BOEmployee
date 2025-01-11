@@ -1,12 +1,11 @@
 package com.system.BOEmployee.service;
 
 import com.system.BOEmployee.constant.ErrorConstant;
-import com.system.BOEmployee.models.dto.request.AddEmployeeRequest;
-import com.system.BOEmployee.models.dto.request.LoginRequest;
-import com.system.BOEmployee.models.dto.request.RegisterRequest;
-import com.system.BOEmployee.models.dto.request.UpdateEmployeeRequest;
+import com.system.BOEmployee.models.dto.request.*;
 import com.system.BOEmployee.models.dto.response.ErrorSchema;
 import com.system.BOEmployee.models.dto.response.ResponseOutput;
+import com.system.BOEmployee.models.entity.Employee;
+import com.system.BOEmployee.models.entity.Employee_System_Config;
 import com.system.BOEmployee.models.entity.User;
 import com.system.BOEmployee.repository.EmployeeRepository;
 import com.system.BOEmployee.repository.EmployeeSystemConfigRepository;
@@ -17,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class MasterServiceImpl implements MasterService {
@@ -69,7 +69,8 @@ public class MasterServiceImpl implements MasterService {
                         responseOutput.errorSchema(ErrorConstant.USER_PASSWORD_NOT_MATCHED), ""
                 );
             }
-        } else {
+        }
+        else {
 
             return new ResponseOutput(
                     responseOutput.errorSchema(ErrorConstant.USER_NEED_TO_BE_REGISTERED), null
@@ -85,15 +86,114 @@ public class MasterServiceImpl implements MasterService {
     }
 
     @Override
-    public ResponseOutput addEmployee(AddEmployeeRequest addEmployeeRequest) throws Exception {
+    public ResponseOutput addEmployee(UserEmployeeRequest userEmployeeRequest) throws Exception {
 
-        return null;
+        Optional<User> userOpt = userRepository.findByEmail(userEmployeeRequest.getEmailAddress());
+
+        if (userOpt.isPresent()) {
+            User user = userOpt.get();
+
+            Optional<Employee>optionalEmployee = employeeRepository.findByFullname(userEmployeeRequest.getEmployee().getSurname());
+
+            if(optionalEmployee.isPresent()){
+                Optional<Employee_System_Config>optionalEmployeeSystemConfig = employeeSystemConfigRepository.findByUserAndEmployee(user,optionalEmployee.get());
+                if(optionalEmployeeSystemConfig.isPresent()){
+                    return new ResponseOutput(
+                            responseOutput.errorSchema(ErrorConstant.EMPLOYEE_HAVE_BEEN_REGISTERED), null
+                    );
+                }
+                else{
+
+                    Employee_System_Config employeeSystemConfig = new Employee_System_Config();
+                    employeeSystemConfig.setEmployee(optionalEmployee.get());
+                    employeeSystemConfig.setUser(user);
+                    employeeSystemConfigRepository.save(employeeSystemConfig);
+
+                    return new ResponseOutput(
+                            responseOutput.errorSchema(ErrorConstant.REQUEST_SUCCESS), employeeSystemConfig
+                    );
+                }
+
+            }
+
+            else{
+                Employee employee = new Employee();
+                employee.setFullname(userEmployeeRequest.getEmployee().getFullname());
+
+                employee.setDepartment(userEmployeeRequest.getEmployee().getDepartment());
+                employee.setDob(userEmployeeRequest.getEmployee().getDateOfBirth());
+                employee.setSalary(userEmployeeRequest.getEmployee().getSalary());
+                employeeRepository.save(employee);
+
+                Employee_System_Config employeeSystemConfig = new Employee_System_Config();
+                employeeSystemConfig.setEmployee(employee);
+                employeeSystemConfig.setUser(user);
+                employeeSystemConfigRepository.save(employeeSystemConfig);
+
+                return new ResponseOutput(
+                        responseOutput.errorSchema(ErrorConstant.REQUEST_SUCCESS), employeeSystemConfig
+                );
+            }
+
+        }
+        else {
+
+            return new ResponseOutput(
+                    responseOutput.errorSchema(ErrorConstant.USER_NEED_TO_BE_REGISTERED), null
+            );
+        }
     }
 
     @Override
-    public ResponseOutput updateEmployee(UpdateEmployeeRequest updateEmployeeRequest) throws Exception {
+    public ResponseOutput updateEmployee(UserEmployeeRequest userEmployeeRequest, UUID id) throws Exception {
 
-        return null;
+        Optional<User> userOpt = userRepository.findByEmail(userEmployeeRequest.getEmailAddress());
+
+        if (userOpt.isPresent()) {
+            User user = userOpt.get();
+
+            Optional<Employee>optionalEmployee = employeeRepository.findById(id);
+
+            if(optionalEmployee.isPresent()){
+                Optional<Employee_System_Config>optionalEmployeeSystemConfig = employeeSystemConfigRepository.findByUserAndEmployee(user,optionalEmployee.get());
+                if(optionalEmployeeSystemConfig.isPresent()){
+                    Employee employee = optionalEmployee.get();
+                    employee.setFullname(userEmployeeRequest.getEmployee().getFullname());
+                    employee.setDepartment(userEmployeeRequest.getEmployee().getDepartment());
+                    employee.setDob(userEmployeeRequest.getEmployee().getDateOfBirth());
+                    employee.setSalary(userEmployeeRequest.getEmployee().getSalary());
+                    employeeRepository.save(employee);
+
+                    Employee_System_Config employeeSystemConfig = optionalEmployeeSystemConfig.get();
+                    employeeSystemConfig.setEmployee(employee);
+                    employeeSystemConfig.setUser(user);
+                    employeeSystemConfigRepository.save(employeeSystemConfig);
+
+                    return new ResponseOutput(
+                            responseOutput.errorSchema(ErrorConstant.REQUEST_SUCCESS), employeeSystemConfig
+                    );
+                }
+                else{
+                    return new ResponseOutput(
+                            responseOutput.errorSchema(ErrorConstant.EMPLOYEE_NEED_TO_BE_REGISTERED), ""
+                    );
+                }
+
+            }
+
+            else{
+                return new ResponseOutput(
+                        responseOutput.errorSchema(ErrorConstant.EMPLOYEE_NEED_TO_BE_REGISTERED), ""
+                );
+            }
+
+        }
+        else {
+
+            return new ResponseOutput(
+                    responseOutput.errorSchema(ErrorConstant.USER_NEED_TO_BE_REGISTERED), null
+            );
+        }
     }
 
     @Override

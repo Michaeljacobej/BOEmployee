@@ -1,15 +1,14 @@
 package com.system.BOEmployee.controller;
 
-import com.system.BOEmployee.models.dto.request.AddEmployeeRequest;
-import com.system.BOEmployee.models.dto.request.LoginRequest;
-import com.system.BOEmployee.models.dto.request.RegisterRequest;
-import com.system.BOEmployee.models.dto.request.UpdateEmployeeRequest;
+import com.system.BOEmployee.models.dto.request.*;
 import com.system.BOEmployee.models.dto.response.ResponseOutput;
 import com.system.BOEmployee.service.MasterService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/boe/master")
@@ -31,14 +30,14 @@ public class MasterController {
     }
 
     @PostMapping("/employee")
-    public ResponseEntity<?> addEmployee (@RequestBody @Valid AddEmployeeRequest employeeRequest) throws  Exception{
-        ResponseOutput responseOutput = masterService.addEmployee(employeeRequest);
+    public ResponseEntity<?> addEmployee (@RequestBody @Valid UserEmployeeRequest userEmployeeRequest) throws  Exception{
+        ResponseOutput responseOutput = masterService.addEmployee(userEmployeeRequest);
         return ResponseEntity.ok().body(responseOutput);
     }
 
-    @PutMapping("/employee")
-    public ResponseEntity<?> updateEmployee (@RequestBody @Valid UpdateEmployeeRequest employeeRequest) throws  Exception{
-        ResponseOutput responseOutput = masterService.updateEmployee(employeeRequest);
+    @PutMapping("/employee/{employeeId}")
+    public ResponseEntity<?> updateEmployee (@RequestBody @Valid UserEmployeeRequest userEmployeeRequest,@PathVariable UUID employeeId) throws  Exception{
+        ResponseOutput responseOutput = masterService.updateEmployee(userEmployeeRequest,employeeId);
         return ResponseEntity.ok().body(responseOutput);
     }
 

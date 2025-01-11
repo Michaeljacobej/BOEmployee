@@ -12,7 +12,12 @@ public enum ErrorConstant {
 
     USER_PASSWORD_NOT_MATCHED("BOE940-00-002", "user dan password tidak cocok", "user and password is not matched", HttpStatus.BAD_REQUEST),
 
-    USER_NEED_TO_BE_REGISTERED("BOE940-00-003", "user harus didaftarkan terlebih dahulu", "user need to be registered", HttpStatus.BAD_REQUEST);
+    USER_NEED_TO_BE_REGISTERED("BOE940-00-003", "user harus didaftarkan terlebih dahulu", "user need to be registered", HttpStatus.BAD_REQUEST),
+
+    EMPLOYEE_NEED_TO_BE_REGISTERED("BOE940-00-004", "pekerja harus didaftarkan terlebih dahulu", "employee need to be registered", HttpStatus.BAD_REQUEST),
+
+    EMPLOYEE_HAVE_BEEN_REGISTERED("BOE940-00-005", "user sudah mendaftarkan employee", "user have been registered this employee", HttpStatus.BAD_REQUEST);
+
     private String errorCode;
     private String errorMessageIndonesian;
     private String errorMessageEnglish;

@@ -30,8 +30,7 @@ public class Employee {
     @Column(name = "FULLNAME")
     private String fullname;
 
-    @Column(name = "SURNAME")
-    private String surname;
+
 
     @Column(name = "DOB")
     private Timestamp dob;

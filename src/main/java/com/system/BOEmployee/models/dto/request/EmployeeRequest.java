@@ -13,11 +13,12 @@ import java.sql.Timestamp;
 @AllArgsConstructor
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class EmployeeRequest {
+
     private String fullname;
 
     private String surname;
 
-    private Timestamp timestamp;
+    private Timestamp dateOfBirth;
 
     private String department;
 
