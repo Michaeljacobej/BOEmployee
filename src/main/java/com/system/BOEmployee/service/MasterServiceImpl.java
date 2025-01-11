@@ -48,16 +48,35 @@ public class MasterServiceImpl implements MasterService {
                             responseOutput.errorSchema(ErrorConstant.REQUEST_SUCCESS), newUser
                     );
                 });
-//        return new ResponseOutput(
-//                responseOutput.errorSchema(ErrorConstant.REQUEST_SUCCESS), "Success"
-//        );
     }
 
     @Override
     public ResponseOutput loginUser(LoginRequest loginRequest) throws Exception {
+        Optional<User> userOpt = userRepository.findByEmail(loginRequest.getEmailAddress());
 
-        return null;
+        if (userOpt.isPresent()) {
+            User user = userOpt.get();
+
+            Optional<User> userWithPassword = userRepository.findByEmailAndPassword(loginRequest.getEmailAddress(), loginRequest.getPassword());
+
+            if (userWithPassword.isPresent()) {
+                return new ResponseOutput(
+                        responseOutput.errorSchema(ErrorConstant.REQUEST_SUCCESS), user
+                );
+            } else {
+
+                return new ResponseOutput(
+                        responseOutput.errorSchema(ErrorConstant.USER_PASSWORD_NOT_MATCHED), ""
+                );
+            }
+        } else {
+
+            return new ResponseOutput(
+                    responseOutput.errorSchema(ErrorConstant.USER_NEED_TO_BE_REGISTERED), null
+            );
+        }
     }
+
 
     @Override
     public ResponseOutput getListEmployee() throws Exception {
