@@ -1,4 +1,4 @@
 package com.system.BOEmployee.models.dto.request;
 
-public class Update {
+public class AddRequest {
 }
