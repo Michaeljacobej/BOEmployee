@@ -49,12 +49,4 @@ public class User {
     @JsonIgnore
     private LocalDateTime updatedAt;
 
-//    @ManyToOne(fetch = FetchType.EAGER)
-//    @JoinColumn(name = "CHANNEL_MASTER_ID")
-//    private Channel_Master channelMaster;
-
-//    @ManyToOne(fetch = FetchType.EAGER)
-//    @JoinColumn(name = "CHANNEL_MASTER_ID")
-//    private Channel_Master channelMaster;
-
 }
