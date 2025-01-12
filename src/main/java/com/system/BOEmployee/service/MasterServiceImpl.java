@@ -6,9 +6,11 @@ import com.system.BOEmployee.models.dto.response.EmployeeResponse;
 import com.system.BOEmployee.models.dto.response.ErrorSchema;
 import com.system.BOEmployee.models.dto.response.ListEmployeeResponse;
 import com.system.BOEmployee.models.dto.response.ResponseOutput;
+import com.system.BOEmployee.models.entity.Department;
 import com.system.BOEmployee.models.entity.Employee;
 import com.system.BOEmployee.models.entity.Employee_System_Config;
 import com.system.BOEmployee.models.entity.User;
+import com.system.BOEmployee.repository.DepartmentRepository;
 import com.system.BOEmployee.repository.EmployeeRepository;
 import com.system.BOEmployee.repository.EmployeeSystemConfigRepository;
 import com.system.BOEmployee.repository.UserRepository;
@@ -28,6 +30,9 @@ public class MasterServiceImpl implements MasterService {
     private UserRepository userRepository;
     @Autowired
     private EmployeeRepository employeeRepository;
+
+    @Autowired
+    private DepartmentRepository departmentRepository;
 
     @Autowired
     private EmployeeSystemConfigRepository employeeSystemConfigRepository;
@@ -100,8 +105,17 @@ public class MasterServiceImpl implements MasterService {
                     employeeResponse.setId(employeeSystemConfig.getEmployee().getId());
                     employeeResponse.setFullname(employeeSystemConfig.getEmployee().getFullname());
                     employeeResponse.setDateOfBirth(employeeSystemConfig.getEmployee().getDob());
-                    employeeResponse.setDepartment(employeeSystemConfig.getEmployee().getDepartment());
+                    List<Employee>employeeList = employeeRepository.findByDepartment(employeeSystemConfig.getEmployee().getDepartment());
+                    List<Integer> idDepartment = new ArrayList<>();
+                    if(!employeeList.isEmpty()){
+                   for(Employee employee:employeeList){
+                       idDepartment.add(employee.getDepartment().getId());
+                   }
+                   employeeResponse.setDepartment(idDepartment);
+                    }
                     employeeResponse.setSalary(employeeSystemConfig.getEmployee().getSalary());
+                    employeeResponse.setImgurl(employeeSystemConfig.getEmployee().getImgurl());
+                    employeeResponse.setDescription(employeeSystemConfig.getEmployee().getDescription());
                     employeeResponses.add(employeeResponse);
                 }
                 listEmployeeResponse.setListEmployee(employeeResponses);
@@ -150,8 +164,38 @@ public class MasterServiceImpl implements MasterService {
                     employeeSystemConfig.setUser(user);
                     employeeSystemConfigRepository.save(employeeSystemConfig);
 
+                    Employee employeeGet = optionalEmployee.get();
+
+                    List<Integer>integerList = new ArrayList<>();
+                    for(Integer departementId:userEmployeeRequest.getEmployee().getDepartment()){
+                        Optional<Department>department = departmentRepository.findById(departementId);
+                        if(department.isPresent()){
+                            integerList.add(department.get().getId());
+                            employeeGet.setDepartment(department.get());
+                        }
+                    }
+                    employeeRepository.save(employeeGet);
+                    EmployeeResponse employeeResponse = new EmployeeResponse();
+                    employeeResponse.setId(employeeSystemConfig.getEmployee().getId());
+                    employeeResponse.setFullname(employeeSystemConfig.getEmployee().getFullname());
+                    employeeResponse.setDateOfBirth(employeeSystemConfig.getEmployee().getDob());
+
+                    List<Employee>employeeList = employeeRepository.findByDepartment(employeeSystemConfig.getEmployee().getDepartment());
+
+                    List<Integer> idDepartment = new ArrayList<>();
+
+                    if(!employeeList.isEmpty()){
+                        for(Employee employees:employeeList){
+                            idDepartment.add(employees.getDepartment().getId());
+                        }
+                        employeeResponse.setDepartment(idDepartment);
+                    }
+                    employeeResponse.setSalary(employeeSystemConfig.getEmployee().getSalary());
+                    employeeResponse.setImgurl(employeeSystemConfig.getEmployee().getImgurl());
+                    employeeResponse.setDescription(employeeSystemConfig.getEmployee().getDescription());
+
                     return new ResponseOutput(
-                            responseOutput.errorSchema(ErrorConstant.REQUEST_SUCCESS), employeeSystemConfig
+                            responseOutput.errorSchema(ErrorConstant.REQUEST_SUCCESS), employeeResponse
                     );
                 }
 
@@ -160,10 +204,18 @@ public class MasterServiceImpl implements MasterService {
             else{
                 Employee employee = new Employee();
                 employee.setFullname(userEmployeeRequest.getEmployee().getFullname());
-
-                employee.setDepartment(userEmployeeRequest.getEmployee().getDepartment());
+                employee.setImgurl(userEmployeeRequest.getEmployee().getImgurl());
+                List<Integer>integerList = new ArrayList<>();
+                for(Integer departementId:userEmployeeRequest.getEmployee().getDepartment()){
+                    Optional<Department>department = departmentRepository.findById(departementId);
+                    if(department.isPresent()){
+                        integerList.add(department.get().getId());
+                        employee.setDepartment(department.get());
+                    }
+                }
                 employee.setDob(userEmployeeRequest.getEmployee().getDateOfBirth());
                 employee.setSalary(userEmployeeRequest.getEmployee().getSalary());
+                employee.setDescription(userEmployeeRequest.getEmployee().getDescription());
                 employeeRepository.save(employee);
 
                 Employee_System_Config employeeSystemConfig = new Employee_System_Config();
@@ -171,8 +223,27 @@ public class MasterServiceImpl implements MasterService {
                 employeeSystemConfig.setUser(user);
                 employeeSystemConfigRepository.save(employeeSystemConfig);
 
+                EmployeeResponse employeeResponse = new EmployeeResponse();
+                employeeResponse.setId(employeeSystemConfig.getEmployee().getId());
+                employeeResponse.setFullname(employeeSystemConfig.getEmployee().getFullname());
+                employeeResponse.setDateOfBirth(employeeSystemConfig.getEmployee().getDob());
+
+                List<Employee>employeeList = employeeRepository.findByDepartment(employeeSystemConfig.getEmployee().getDepartment());
+
+                List<Integer> idDepartment = new ArrayList<>();
+
+                if(!employeeList.isEmpty()){
+                    for(Employee employees:employeeList){
+                        idDepartment.add(employees.getDepartment().getId());
+                    }
+                    employeeResponse.setDepartment(idDepartment);
+                }
+                employeeResponse.setSalary(employeeSystemConfig.getEmployee().getSalary());
+                employeeResponse.setImgurl(employeeSystemConfig.getEmployee().getImgurl());
+                employeeResponse.setDescription(employeeSystemConfig.getEmployee().getDescription());
+
                 return new ResponseOutput(
-                        responseOutput.errorSchema(ErrorConstant.REQUEST_SUCCESS), employeeSystemConfig
+                        responseOutput.errorSchema(ErrorConstant.REQUEST_SUCCESS), employeeResponse
                 );
             }
 
@@ -186,7 +257,7 @@ public class MasterServiceImpl implements MasterService {
     }
 
     @Override
-    public ResponseOutput updateEmployee(UserEmployeeRequest userEmployeeRequest, UUID id) throws Exception {
+    public ResponseOutput updateEmployee(UserEmployeeRequest userEmployeeRequest, Integer id) throws Exception {
 
         Optional<User> userOpt = userRepository.findByEmail(userEmployeeRequest.getEmailAddress());
 
@@ -200,9 +271,16 @@ public class MasterServiceImpl implements MasterService {
                 if(optionalEmployeeSystemConfig.isPresent()){
                     Employee employee = optionalEmployee.get();
                     employee.setFullname(userEmployeeRequest.getEmployee().getFullname());
-                    employee.setDepartment(userEmployeeRequest.getEmployee().getDepartment());
+                    for (Integer idDpartment:userEmployeeRequest.getEmployee().getDepartment()){
+                        Optional<Department>department= departmentRepository.findById(id);
+                        if(department.isPresent()){
+                            employee.setDepartment(department.get());
+                        }
+                    }
+                    employee.setImgurl(userEmployeeRequest.getEmployee().getImgurl());
                     employee.setDob(userEmployeeRequest.getEmployee().getDateOfBirth());
                     employee.setSalary(userEmployeeRequest.getEmployee().getSalary());
+                    employee.setDescription(userEmployeeRequest.getEmployee().getDescription());
                     employeeRepository.save(employee);
 
                     Employee_System_Config employeeSystemConfig = optionalEmployeeSystemConfig.get();
@@ -238,7 +316,7 @@ public class MasterServiceImpl implements MasterService {
     }
 
     @Override
-    public ResponseOutput deleteEmployee(String email, UUID id) throws Exception {
+    public ResponseOutput deleteEmployee(String email, Integer id) throws Exception {
         Optional<User> userOpt = userRepository.findByEmail(email);
 
         if (userOpt.isPresent()) {

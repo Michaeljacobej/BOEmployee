@@ -19,12 +19,17 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class User {
+
+
+//    @UuidGenerator
+//    @Column(name = "ID")
+//    @JsonIgnore
+//    private UUID id;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @UuidGenerator
-    @Column(name = "ID")
+    @Column(name = "id", updatable = false, nullable = false)
     @JsonIgnore
-    private UUID id;
+    private Integer id;
 
     @Column(name = "FULLNAME")
     private String fullname;

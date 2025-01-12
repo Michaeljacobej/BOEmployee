@@ -11,7 +11,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public interface EmployeeSystemConfigRepository extends JpaRepository<Employee_System_Config, UUID> {
+public interface EmployeeSystemConfigRepository extends JpaRepository<Employee_System_Config, Integer> {
 
     Optional<Employee_System_Config>findByUserAndEmployee(User user , Employee employee);
 

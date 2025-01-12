@@ -20,24 +20,40 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Employee {
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @UuidGenerator
+//    @Column(name = "ID")
+//    @JsonIgnore
+//    private UUID id;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @UuidGenerator
-    @Column(name = "ID")
+    @Column(name = "id", updatable = false, nullable = false)
     @JsonIgnore
-    private UUID id;
+    private Integer id;
 
+//    @Column(name = "nmb", updatable = false, nullable = false)
+//    private Integer nmb;
     @Column(name = "FULLNAME")
     private String fullname;
 
     @Column(name = "DOB")
     private Timestamp dob;
 
-    @Column(name = "DEPARTMENT")
-    private String department;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "DEPARTMENT_ID")
+    private Department department;
+
+
+    @Column(name = "imgurl")
+    private String imgurl;
 
     @Column(name = "SALARY")
     private Long salary;
+
+    @Column(name = "DESCRIPTION")
+    private String description;
 
     @Column(name = "IS_ACTIVE")
     private String isActive;

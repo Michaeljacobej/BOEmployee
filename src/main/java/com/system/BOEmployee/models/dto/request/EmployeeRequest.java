@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -18,7 +19,11 @@ public class EmployeeRequest {
 
     private Timestamp dateOfBirth;
 
-    private String department;
+    private List<Integer> department;
+
+    private String imgurl;
+
+    private String description;
 
     private Long salary;
 }

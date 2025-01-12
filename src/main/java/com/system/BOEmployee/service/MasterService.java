@@ -11,8 +11,8 @@ public interface MasterService {
     ResponseOutput registerUser(RegisterRequest registerRequest) throws Exception;
     ResponseOutput loginUser(LoginRequest loginRequest) throws Exception;
     ResponseOutput addEmployee(UserEmployeeRequest userEmployeeRequest) throws Exception;
-    ResponseOutput updateEmployee(UserEmployeeRequest userEmployeeRequest, UUID id) throws Exception;
-    ResponseOutput deleteEmployee(String userEmployeeRequest, UUID id) throws Exception;
+    ResponseOutput updateEmployee(UserEmployeeRequest userEmployeeRequest, Integer id) throws Exception;
+    ResponseOutput deleteEmployee(String userEmployeeRequest, Integer id) throws Exception;
     ResponseOutput getListEmployee( String email) throws Exception;
 
 }

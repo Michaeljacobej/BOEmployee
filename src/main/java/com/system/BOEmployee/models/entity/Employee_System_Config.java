@@ -21,10 +21,9 @@ import java.util.UUID;
 public class Employee_System_Config {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @UuidGenerator
-    @Column(name = "ID")
+    @Column(name = "id", updatable = false, nullable = false)
     @JsonIgnore
-    private UUID id;
+    private Integer id;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "USER_ID")

@@ -1,5 +1,6 @@
 package com.system.BOEmployee.repository;
 
+import com.system.BOEmployee.models.entity.Department;
 import com.system.BOEmployee.models.entity.Employee;
 import com.system.BOEmployee.models.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -10,11 +11,12 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public interface EmployeeRepository extends JpaRepository<Employee, UUID> {
+public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
 
     Optional<Employee> findByFullname(String fullname) ;
 
-    Optional<Employee>findById(UUID uuid);
+    List<Employee>findByDepartment(Department department);
+    Optional<Employee>findById(Integer uuid);
 
 
 }

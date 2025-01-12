@@ -36,7 +36,7 @@ public class MasterController {
     }
 
     @PutMapping("/employee/{employeeId}")
-    public ResponseEntity<?> updateEmployee (@RequestBody @Valid UserEmployeeRequest userEmployeeRequest,@PathVariable UUID employeeId) throws  Exception{
+    public ResponseEntity<?> updateEmployee (@RequestBody @Valid UserEmployeeRequest userEmployeeRequest,@PathVariable Integer employeeId) throws  Exception{
         ResponseOutput responseOutput = masterService.updateEmployee(userEmployeeRequest,employeeId);
         return ResponseEntity.ok().body(responseOutput);
     }
@@ -48,7 +48,7 @@ public class MasterController {
     }
 
     @DeleteMapping("/employee/{employeeId}")
-    public ResponseEntity<?> deleteEmployee (@RequestHeader ("email")  String email,@PathVariable UUID employeeId) throws  Exception{
+    public ResponseEntity<?> deleteEmployee (@RequestHeader ("email")  String email,@PathVariable Integer employeeId) throws  Exception{
         ResponseOutput responseOutput = masterService.deleteEmployee(email,employeeId);
         return ResponseEntity.ok().body(responseOutput);
     }
